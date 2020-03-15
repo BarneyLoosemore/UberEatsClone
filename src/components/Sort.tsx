@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 import Animated, { Easing } from "react-native-reanimated";
+import { useMemoOne } from "use-memo-one";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import {
   onGestureEvent,
@@ -9,8 +10,6 @@ import {
   timing
 } from "react-native-redash";
 import { Ionicons } from "@expo/vector-icons";
-
-import { useMemoOne } from "use-memo-one";
 
 import { height as DEVICE_HEIGHT } from "../constants/styles";
 
