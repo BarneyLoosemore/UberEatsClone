@@ -1,87 +1,79 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { useNavigation } from "react-navigation-hooks";
-import Animated from "react-native-reanimated";
-import {
-  PanGestureHandler,
-  TapGestureHandler,
-  State,
-  ScrollView
-} from "react-native-gesture-handler";
+import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
+import Animated, { Easing } from "react-native-reanimated";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import {
   onGestureEvent,
   useValues,
   snapPoint,
-  timing,
-  delay,
-  useTimingTransition,
-  useSpringTransition,
-  withTransition,
-  withSpringTransition,
-  bInterpolate,
-  panGestureHandler
+  timing
 } from "react-native-redash";
+import { Ionicons } from "@expo/vector-icons";
 
-import { RestaurantDetail } from "./RestaurantDetail/RestaurantDetail";
-import { restaurants } from "../static/mocks";
+import { useMemoOne } from "use-memo-one";
+
 import { height as DEVICE_HEIGHT } from "../constants/styles";
 
-const {
-  block,
-  useCode,
-  cond,
-  call,
-  and,
-  eq,
-  set,
-  not,
-  interpolate,
-  Extrapolate,
-  Value,
-  onChange,
-  acc,
-  neq,
-  diff
-} = Animated;
+const { block, useCode, cond, and, eq, set, not, greaterOrEq } = Animated;
 
 const TOP_OFFSET = 100;
 const MIN = DEVICE_HEIGHT;
 const MAX = 0;
 const SNAP_BACK = DEVICE_HEIGHT / 2;
 
-// type HomeProps = { open: Animated};
+type SortProps = { translateY: Animated.Value<number> };
 
-export const Sort = ({
-  transition,
-  translationY,
-  open
-  // transition: initialTransition
-}) => {
-  const [state, velocityY] = useValues([State.UNDETERMINED, 0], []);
-  const translateY = bInterpolate(transition, MIN, MAX);
-
-  const gestureHandler = onGestureEvent({ state, translationY, velocityY });
-  const gestureTransition = interpolate(translationY, {
-    inputRange: [MAX, MIN],
-    outputRange: [1, 0]
-  });
+export const Sort = ({ translateY }: SortProps) => {
+  const [state, translationY, velocityY, shouldSnapBack] = useValues(
+    [State.UNDETERMINED, 0, 0, 0],
+    []
+  );
+  const gestureHandler = useMemoOne(
+    () => onGestureEvent({ state, translationY, velocityY }),
+    []
+  );
+  const snapTo = snapPoint(translationY, velocityY, [0, SNAP_BACK]);
 
   useCode(
     () =>
       block([
         cond(
-          and(open, neq(diff(open), 1), set(transition, withTransition(open))),
-          cond(eq(state, State.ACTIVE), [set(transition, gestureTransition)])
+          and(not(shouldSnapBack), eq(snapTo, SNAP_BACK), eq(state, State.END)),
+          set(shouldSnapBack, 1)
+        ),
+        cond(
+          shouldSnapBack,
+          [
+            set(shouldSnapBack, 0),
+            set(
+              translateY,
+              timing({
+                from: translateY,
+                to: MIN,
+                easing: Easing.out(Easing.poly(4))
+              })
+            )
+          ],
+          [
+            cond(
+              and(greaterOrEq(translateY, 0), eq(state, State.ACTIVE)),
+              set(translateY, translationY)
+            ),
+            cond(
+              eq(state, State.END),
+              set(
+                translateY,
+                timing({
+                  from: translateY,
+                  to: MAX,
+                  easing: Easing.out(Easing.poly(3))
+                })
+              )
+            )
+          ]
         )
-
-        // eq(open, 1)
-
-        // cond(eq(state, State.ACTIVE), [set(transition, gestureTransition)]),
-        // cond(eq(state, State.END), [
-        //   set(transition, timing({ from: translateY, to: 0 }))
-        // ])
       ]),
-    [open, state, transition]
+    [translateY, shouldSnapBack]
   );
 
   return (
@@ -92,14 +84,27 @@ export const Sort = ({
           width: "100%",
           position: "absolute",
           zIndex: 999,
-          backgroundColor: "grey",
+          backgroundColor: "white",
           borderRadius: 15,
           top: TOP_OFFSET,
           transform: [{ translateY }]
-        }}
-      />
+        }}>
+        <TouchableOpacity
+          style={{ position: "absolute", left: 20, top: 10 }}
+          onPress={() => shouldSnapBack.setValue(1)}>
+          <Ionicons name="ios-close" size={45} color="black" />
+        </TouchableOpacity>
+        <Text
+          style={{
+            marginTop: 25,
+            fontSize: 18,
+            fontFamily: "transport",
+            width: "100%",
+            textAlign: "center"
+          }}>
+          Sort and filter
+        </Text>
+      </Animated.View>
     </PanGestureHandler>
   );
 };
-
-const styles = StyleSheet.create({});

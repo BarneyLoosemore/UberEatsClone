@@ -1,104 +1,77 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Easing,
-  Button
-} from "react-native";
-import Animated from "react-native-reanimated";
-import {
-  PanGestureHandler,
-  TapGestureHandler,
-  State,
-  ScrollView
-} from "react-native-gesture-handler";
+import { StyleSheet, Text, View } from "react-native";
+import Animated, { Easing } from "react-native-reanimated";
+
 import { useMemoOne } from "use-memo-one";
-import {
-  onGestureEvent,
-  useValues,
-  snapPoint,
-  timing,
-  delay,
-  useTimingTransition,
-  useSpringTransition,
-  withTransition,
-  withSpringTransition,
-  bInterpolate,
-  panGestureHandler
-} from "react-native-redash";
+import { timing } from "react-native-redash";
 
 import { RestaurantCardList } from "../components/RestaurantCardList/RestaurantCardList";
 import { ImageGallery } from "../components/ImageGallery";
 import { FilterBar } from "../components/FilterBar";
 import { Sort } from "../components/Sort";
-import { images, restaurantCategories } from "../static/mocks";
+import { offers, restaurantCategories } from "../static/mocks";
 import {
   HORIZONTAL_MARGIN,
   height as DEVICE_HEIGHT
 } from "../constants/styles";
 
-const {
-  block,
-  useCode,
-  cond,
-  call,
-  and,
-  eq,
-  set,
-  not,
-  interpolate,
-  Extrapolate,
-  Value,
-  diff,
-  neq
-} = Animated;
+const { block, useCode, cond, set, interpolate, Value } = Animated;
 
-type HomeProps = {};
-
-const TOP_OFFSET = 100;
 const MIN = DEVICE_HEIGHT;
 const MAX = 0;
-const SNAP_BACK = DEVICE_HEIGHT / 2;
 
 export const Home = () => {
   const [filter, setFilter] = useState<string | null>(null);
-  const open = new Value<0 | 1>(0);
-  const transition = new Value(0);
-  const translationY = new Value(0);
-  // const transition = withTransition(open);
 
-  const scale = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [1, 0.9]
-  });
+  const { translateY, open } = useMemoOne(
+    () => ({ translateY: new Value(MIN), open: new Value<1 | 0>(0) }),
+    []
+  );
 
-  const opacity = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [1, 0.7]
-  });
-
-  const rotateX = interpolate(transition, {
-    inputRange: [0, 1],
-    outputRange: [0, 0.1]
-  });
-
-  const gestureTransition = interpolate(translationY, {
+  const scale = interpolate(translateY, {
     inputRange: [MAX, MIN],
-    outputRange: [1, 0]
+    outputRange: [0.9, 1]
   });
 
-  // set(transition, withTransition(open));
-  // useCode(() => block([set(transition, withTransition(open))]), [open]);
+  const opacity = interpolate(translateY, {
+    inputRange: [MAX, MIN],
+    outputRange: [0.7, 1]
+  });
+
+  const rotateX = interpolate(translateY, {
+    inputRange: [MAX, MIN],
+    outputRange: [0.12, 0]
+  });
+
+  const borderRadius = interpolate(translateY, {
+    inputRange: [MAX, MIN],
+    outputRange: [15, 30]
+  });
+
+  useCode(
+    () =>
+      block([
+        cond(
+          open,
+          set(
+            translateY,
+            timing({ from: MIN, to: MAX, easing: Easing.out(Easing.poly(2)) })
+          )
+        )
+      ]),
+    [open]
+  );
+
+  useEffect(() => {
+    filter !== null && open.setValue(1);
+  }, [filter]);
 
   return (
     <View style={styles.background}>
       <Animated.View
         style={{
           backgroundColor: "#EBEBEB",
-          borderRadius: 15,
+          borderRadius,
           opacity,
           transform: [
             {
@@ -108,14 +81,10 @@ export const Home = () => {
             }
           ]
         }}>
-        <ScrollView style={{ borderRadius: 15 }}>
-          <FilterBar setFilter={setFilter} />
+        <Animated.ScrollView style={{ borderRadius }}>
+          <FilterBar filter={filter} setFilter={setFilter} />
 
-          <ImageGallery images={images} />
-          <TouchableOpacity onPress={() => open.setValue(1)}>
-            <Text style={{ fontSize: 35 }}>Toggle</Text>
-          </TouchableOpacity>
-          <Text>{filter}</Text>
+          <ImageGallery offers={offers} />
           <View style={{ marginTop: 50 }} />
           {restaurantCategories.map(({ title, restaurants }, index) => (
             <View key={index} style={styles.restaurantCategoryContainer}>
@@ -123,14 +92,9 @@ export const Home = () => {
               <RestaurantCardList restaurants={restaurants} />
             </View>
           ))}
-        </ScrollView>
+        </Animated.ScrollView>
       </Animated.View>
-      <Sort
-        transition={transition}
-        translationY={translationY}
-        open={open}
-        transition={transition}
-      />
+      <Sort translateY={translateY} />
     </View>
   );
 };
