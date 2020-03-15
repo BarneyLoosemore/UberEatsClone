@@ -4,13 +4,10 @@ import {
   Text,
   View,
   ScrollView,
-  Image,
   TouchableOpacity
 } from "react-native";
-import { Asset } from "expo-asset";
 
 import { FILTER_BAR_HEIGHT, STATUS_BAR_OFFSET } from "../constants/styles";
-const filterIconUri = Asset.fromModule(require("../assets/Filter.png")).uri;
 import { MaterialIcons } from "@expo/vector-icons";
 
 const filters = [
@@ -25,10 +22,11 @@ const filters = [
 ];
 
 type FilterBarProps = {
+  filter: string;
   setFilter: (filter: string) => void;
 };
 
-export const FilterBar = ({ setFilter }: FilterBarProps) => (
+export const FilterBar = ({ filter, setFilter }: FilterBarProps) => (
   <>
     <View style={styles.offset} />
     <View style={styles.container}>
