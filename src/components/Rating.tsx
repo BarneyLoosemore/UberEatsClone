@@ -4,10 +4,8 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity,
   StyleProp,
-  ViewStyle,
-  TextStyle
+  ViewStyle
 } from "react-native";
 import { Asset } from "expo-asset";
 
