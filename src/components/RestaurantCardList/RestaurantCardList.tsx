@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableWithoutFeedback
-} from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 
 import { RestaurantCard } from "./RestaurantCard";
 

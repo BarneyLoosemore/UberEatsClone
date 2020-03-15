@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, Easing, interpolate } from "react-native";
+import { Animated, Easing } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
@@ -10,21 +10,7 @@ import { Detail } from "./Detail";
 const stackNavigator = createSharedElementStackNavigator(
   {
     Home,
-    // : {
-    //   screen: Home,
-    //   path: "Home",
-    //   navigationOptions: () => ({
-    //     title: "Home"
-    //   })
-    // },
     Detail
-    // : {
-    //   screen: Detail,
-    //   path: "Detail",
-    //   navigationOptions: ({ navigation }) => ({
-    //     title: navigation.state.params.title
-    //   })
-    // }
   },
   {
     mode: "modal",

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TouchableWithoutFeedback
-} from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation, useIsFocused } from "react-navigation-hooks";
 
@@ -55,7 +48,12 @@ export const RestaurantCard = ({ restaurant, index }: RestaurantCardProps) => {
           <Image style={styles.image} source={{ uri: imageUrl }} />
         </SharedElement>
         <SharedElement
-          style={{ position: "absolute", top: 140, right: 30 }}
+          style={{
+            position: "absolute",
+            top: 140,
+            right: 30,
+            opacity: cardOpacity
+          }}
           id={`rating.${id}`}>
           <Rating rating={rating} />
         </SharedElement>
@@ -69,11 +67,6 @@ export const RestaurantCard = ({ restaurant, index }: RestaurantCardProps) => {
               </View>
             ))}
           </Flex>
-          {/* {attributes.map((attribute, i) => (
-            <Text style={styles.attributes} key={i}>
-            {attribute}
-            </Text>
-          ))} */}
           <Text style={styles.time}>{time}</Text>
         </View>
       </View>

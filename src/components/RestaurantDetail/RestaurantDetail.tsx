@@ -21,8 +21,7 @@ import {
   onGestureEvent,
   useValues,
   snapPoint,
-  timing,
-  delay
+  timing
 } from "react-native-redash";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -51,8 +50,6 @@ const dimensions = Dimensions.get("window");
 const FULL_WIDTH = dimensions.width;
 const HEIGHT = dimensions.height;
 const SNAP_BACK = HEIGHT / 2;
-
-// TODO add typograpghy - e.g. <Minor>, <Base>, etc. text
 
 type RestaurantDetailProps = {
   id: number;
@@ -162,16 +159,15 @@ export const RestaurantDetail = ({
           set(shouldSnapBack, 1)
         ),
         cond(
-          shouldSnapBack, // if this
-          call([], () => goBack()), // then this
-          // else this:
+          shouldSnapBack,
+          call([], () => goBack()),
           cond(
-            eq(state, State.END), // then if this
+            eq(state, State.END),
             [
-              set(translateX, timing({ from: translateX, to: 0 })), // then this
-              set(translateY, timing({ from: translateY, to: 0 })) // and this
+              set(translateX, timing({ from: translateX, to: 0 })),
+              set(translateY, timing({ from: translateY, to: 0 }))
             ],
-            [set(translateX, translationX), set(translateY, translationY)] // else this
+            [set(translateX, translationX), set(translateY, translationY)]
           )
         )
       ]),

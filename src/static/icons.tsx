@@ -2,11 +2,6 @@ import React from "react";
 
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-// export const INDIAN = "";
-// export const CHINESE = "";
-// export const PASTA = "";
-// export const SUSHI = "";
-
 export default {
   Pizza: <Ionicons name="md-pizza" size={20} />,
   Healthy: <Ionicons name="ios-nutrition" size={20} />,

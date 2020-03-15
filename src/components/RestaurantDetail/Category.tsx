@@ -21,7 +21,6 @@ const Dish = ({ id, name, description, price, imageUrl }: DishProps) => (
     <Flex justifyContent="space-between" fullWidth>
       <Flex direction="column">
         <Text style={styles.dishText}>{name}</Text>
-        {/* TODO add typograpghy - e.g. <Minor>, <Base>, etc. text */}
         {description ? (
           <Text style={styles.dishText}>{description}</Text>
         ) : null}

@@ -3,10 +3,9 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "react-navigation-hooks";
 
 import { RestaurantDetail } from "../components/RestaurantDetail/RestaurantDetail";
-import { restaurants } from "../static/mocks";
 
 export const Detail = () => {
-  const { getParam, goBack } = useNavigation();
+  const { getParam } = useNavigation();
   const restaurant = getParam("restaurant");
   return restaurant ? (
     <View style={styles.container}>

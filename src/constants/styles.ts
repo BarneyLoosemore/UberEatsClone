@@ -5,7 +5,7 @@ export const { width, height } = Dimensions.get("window");
 export const HORIZONTAL_MARGIN = 20;
 
 export const [GALLERY_IMAGE_HEIGHT, GALLERY_IMAGE_WIDTH, SLIDER_WIDTH] = [
-  225,
+  190,
   width,
   width
 ];
