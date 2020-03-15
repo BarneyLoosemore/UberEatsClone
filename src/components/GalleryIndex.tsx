@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { GALLERY_IMAGE_HEIGHT } from "../constants/styles";
+import { GALLERY_IMAGE_HEIGHT, FILTER_BAR_HEIGHT } from "../constants/styles";
 
 type GalleryIndexProps = { activeIndex: number; galleryLength: number };
 
@@ -30,19 +30,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     zIndex: 9999,
-    top: GALLERY_IMAGE_HEIGHT - 30
+    top: GALLERY_IMAGE_HEIGHT + FILTER_BAR_HEIGHT + 10
   },
   indexCircle: {
     backgroundColor: "black",
-    width: 12,
-    height: 12,
+    width: 10,
+    height: 10,
     borderRadius: 12,
     marginLeft: 5,
     marginRight: 5,
-    opacity: 0.6
+    opacity: 0.7
   },
   activeIndexCircle: {
-    opacity: 1,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    opacity: 1
   }
 });
