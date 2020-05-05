@@ -6,22 +6,22 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  Animated as VanillaAnimated
+  Animated as VanillaAnimated,
 } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation, useIsFocused } from "react-navigation-hooks";
-import Animated from "react-native-reanimated";
+import Animated, { Easing } from "react-native-reanimated";
 import {
   PanGestureHandler,
   State,
-  ScrollView
+  ScrollView,
 } from "react-native-gesture-handler";
 import { useMemoOne } from "use-memo-one";
 import {
   onGestureEvent,
   useValues,
   snapPoint,
-  timing
+  timing,
 } from "react-native-redash";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -43,7 +43,10 @@ const {
   set,
   not,
   interpolate,
-  Extrapolate
+  Extrapolate,
+  multiply,
+  pow,
+  Value,
 } = Animated;
 
 const dimensions = Dimensions.get("window");
@@ -88,7 +91,7 @@ export const RestaurantDetail = ({
   imageUrl,
   location,
   deliveryFee,
-  categories
+  categories,
 }: RestaurantDetailProps) => {
   const { goBack } = useNavigation();
   const isFocused = useIsFocused();
@@ -104,14 +107,14 @@ export const RestaurantDetail = ({
       VanillaAnimated.timing(gradientOpacity, {
         toValue: 1,
         duration: 200,
-        delay: 1000
+        delay: 1000,
       }).start();
     }
 
     if (!isFocused) {
       VanillaAnimated.timing(gradientOpacity, {
         toValue: 0,
-        duration: 1000
+        duration: 1000,
       }).start();
     }
   }, [isFocused]);
@@ -131,13 +134,13 @@ export const RestaurantDetail = ({
     state,
     translateX,
     translateY,
-    shouldSnapBack
+    shouldSnapBack,
   ] = useValues([0, 0, 0, State.UNDETERMINED, 0, 0, 0], []);
   const snapTo = snapPoint(translationY, velocityY, [0, SNAP_BACK]);
   const scale = interpolate(translateY, {
     inputRange: [0, SNAP_BACK],
     outputRange: [1, 0.8],
-    extrapolate: Extrapolate.CLAMP
+    extrapolate: Extrapolate.CLAMP,
   });
 
   const gestureHandler = useMemoOne(
@@ -146,7 +149,7 @@ export const RestaurantDetail = ({
         translationX,
         translationY,
         velocityY,
-        state
+        state,
       }),
     [state, translationX, translationY, velocityY]
   );
@@ -154,6 +157,10 @@ export const RestaurantDetail = ({
   useCode(
     () =>
       block([
+        call([velocityY, shouldSnapBack], () => {
+          // console.log(velocityY);
+          // console.log(shouldSnapBack);
+        }),
         cond(
           and(not(shouldSnapBack), eq(snapTo, SNAP_BACK), eq(state, State.END)),
           set(shouldSnapBack, 1)
@@ -164,15 +171,22 @@ export const RestaurantDetail = ({
           cond(
             eq(state, State.END),
             [
+              // call([], () => console.log("end")),
               set(translateX, timing({ from: translateX, to: 0 })),
-              set(translateY, timing({ from: translateY, to: 0 }))
+              set(translateY, timing({ from: translateY, to: 0 })),
             ],
-            [set(translateX, translationX), set(translateY, translationY)]
+            [
+              // call([], () => console.log("bah")),
+              set(translateX, translationX),
+              set(translateY, pow(multiply(translationY, 0.55), 1.01)),
+            ]
           )
-        )
+        ),
       ]),
     []
   );
+
+  console.log(enableGesture);
   return (
     <ScrollView
       style={styles.container}
@@ -183,40 +197,37 @@ export const RestaurantDetail = ({
       <PanGestureHandler
         {...gestureHandler}
         ref={gestureHandlerRef}
-        activeOffsetY={5}
+        activeOffsetY={40}
         failOffsetY={-5}
         enabled={enableGesture}>
         <Animated.View
           style={{
-            borderRadius: 15,
             transform: [{ translateX }, { translateY }, { scale }],
-            backgroundColor: "white"
+            backgroundColor: "white",
           }}>
           <SharedElement id={`${id}`}>
             <Image source={{ uri: imageUrl }} style={styles.headerImage} />
           </SharedElement>
           <VanillaAnimated.View
             style={{
-              borderRadius: 15,
               position: "absolute",
               left: 0,
               right: 0,
               top: gradientOpacity.interpolate({
                 inputRange: [0, 1],
-                outputRange: [-10, 0]
+                outputRange: [-10, 0],
               }),
               height: 80,
-              opacity: gradientOpacity
+              opacity: gradientOpacity,
             }}>
             <LinearGradient
               colors={["rgba(0,0,0,0.8)", "transparent"]}
               style={{
-                borderRadius: 15,
                 position: "absolute",
                 left: 0,
                 right: 0,
                 top: 0,
-                height: 90
+                height: 90,
               }}
             />
             <TouchableOpacity activeOpacity={0.6} onPress={() => goBack()}>
@@ -260,7 +271,6 @@ export const RestaurantDetail = ({
               ))}
             </Flex>
             <View style={{ marginTop: 8 }} />
-            <Text style={styles.infoText}>{rating * 10}% like this</Text>
             <Divider />
             <Flex>
               <Text style={styles.infoText}>{distance} miles</Text>
@@ -273,7 +283,7 @@ export const RestaurantDetail = ({
             {/* ----------------- */}
             <Divider />
             <Text style={styles.infoText}>Menu</Text>
-            {categories.map(category =>
+            {categories.map((category) =>
               category.dishes.length < 1 ? null : (
                 <Category key={category.id} {...category} />
               )
@@ -286,25 +296,27 @@ export const RestaurantDetail = ({
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    borderRadius: 15,
+  },
   headerImage: {
     resizeMode: "cover",
     height: HEADER_IMAGE_HEIGHT,
-    width: FULL_WIDTH
+    width: FULL_WIDTH,
   },
   title: {
     fontSize: 28,
-    fontFamily: "transport"
+    fontFamily: "airbnbMed",
   },
   close: {
     position: "absolute",
     top: 40,
-    left: 20
+    left: 20,
   },
   favourite: {
     position: "absolute",
     top: 45,
-    right: 20
+    right: 20,
   },
   attributes: {},
   rating: {},
@@ -314,13 +326,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#C0C0C0",
     left: -HORIZONTAL_MARGIN,
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   deliveryInfo: {
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
   },
   infoText: {
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });

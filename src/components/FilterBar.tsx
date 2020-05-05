@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   filterItemText: {
     color: "white",
-    fontFamily: "transport",
+    fontFamily: "airbnbMed",
     fontSize: 18
   },
   offset: {

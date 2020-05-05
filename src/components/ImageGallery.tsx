@@ -47,7 +47,8 @@ const Content = ({ image, offerText, active }: ContentProps) => {
         style={{
           position: "absolute",
           color: "white",
-          fontSize: 24,
+          fontSize: 22,
+          fontFamily: "airbnbMed",
           bottom: 45,
           left: opacity.interpolate({
             inputRange: [0, 1],
@@ -66,8 +67,6 @@ const Content = ({ image, offerText, active }: ContentProps) => {
 export const ImageGallery = ({ offers }: ImageGalleryProps) => {
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  console.log(activeIndex);
 
   return (
     <>
