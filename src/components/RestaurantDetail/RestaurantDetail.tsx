@@ -132,8 +132,7 @@ export const RestaurantDetail = ({
     translateX,
     translateY,
     shouldSnapBack,
-    belowSnapPoint,
-  ] = useValues([0, 0, 0, State.UNDETERMINED, 0, 0, 0, 0], []);
+  ] = useValues([0, 0, 0, State.UNDETERMINED, 0, 0, 0], []);
   const snapTo = snapPoint(translationY, velocityY, [0, SNAP_BACK]);
   const scale = interpolate(translateY, {
     inputRange: [0, SNAP_BACK],
@@ -173,14 +172,6 @@ export const RestaurantDetail = ({
               set(translateY, pow(multiply(translationY, 0.6), 1.01)),
             ]
           )
-        ),
-        cond(
-          eq(snapTo, SNAP_BACK),
-          cond(not(belowSnapPoint), [
-            set(belowSnapPoint, 1),
-            call([], () => Haptics.selectionAsync()),
-          ]),
-          cond(belowSnapPoint, set(belowSnapPoint, 0))
         ),
       ]),
     []
