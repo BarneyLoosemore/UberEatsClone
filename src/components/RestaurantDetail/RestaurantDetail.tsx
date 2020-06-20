@@ -5,12 +5,11 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Dimensions,
   Animated as VanillaAnimated,
 } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation, useIsFocused } from "react-navigation-hooks";
-import Animated, { Easing } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import {
   PanGestureHandler,
   State,
@@ -25,8 +24,14 @@ import {
 } from "react-native-redash";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Haptics from "expo-haptics";
 
-import { HORIZONTAL_MARGIN, HEADER_IMAGE_HEIGHT } from "../../constants/styles";
+import {
+  width as FULL_WIDTH,
+  height as HEIGHT,
+  HORIZONTAL_MARGIN,
+  HEADER_IMAGE_HEIGHT,
+} from "../../constants/styles";
 import { Layout } from "../common/Layout";
 import { Flex } from "../common/Flex";
 import { Rating } from "../Rating";
@@ -46,22 +51,16 @@ const {
   Extrapolate,
   multiply,
   pow,
-  Value,
 } = Animated;
 
-const dimensions = Dimensions.get("window");
-const FULL_WIDTH = dimensions.width;
-const HEIGHT = dimensions.height;
 const SNAP_BACK = HEIGHT / 2;
 
 type RestaurantDetailProps = {
   id: number;
   title: string;
-  icons?: any;
   attributes?: string[];
   rating?: number;
   distance?: number;
-  time?: string;
   imageUrl: string;
   location: string;
   deliveryFee?: string;
@@ -83,10 +82,8 @@ const Divider = () => <View style={styles.divider} />;
 export const RestaurantDetail = ({
   id,
   title,
-  icons,
   attributes,
   rating,
-  time,
   distance,
   imageUrl,
   location,
@@ -95,7 +92,7 @@ export const RestaurantDetail = ({
 }: RestaurantDetailProps) => {
   const { goBack } = useNavigation();
   const isFocused = useIsFocused();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState<boolean>(false);
   const [enableGesture, setEnableGesture] = useState<boolean>(true);
   const scrollRef = useRef<ScrollView>(null);
   const gestureHandlerRef = useRef<PanGestureHandler>(null);
@@ -135,7 +132,8 @@ export const RestaurantDetail = ({
     translateX,
     translateY,
     shouldSnapBack,
-  ] = useValues([0, 0, 0, State.UNDETERMINED, 0, 0, 0], []);
+    belowSnapPoint,
+  ] = useValues([0, 0, 0, State.UNDETERMINED, 0, 0, 0, 0], []);
   const snapTo = snapPoint(translationY, velocityY, [0, SNAP_BACK]);
   const scale = interpolate(translateY, {
     inputRange: [0, SNAP_BACK],
@@ -157,10 +155,6 @@ export const RestaurantDetail = ({
   useCode(
     () =>
       block([
-        call([velocityY, shouldSnapBack], () => {
-          // console.log(velocityY);
-          // console.log(shouldSnapBack);
-        }),
         cond(
           and(not(shouldSnapBack), eq(snapTo, SNAP_BACK), eq(state, State.END)),
           set(shouldSnapBack, 1)
@@ -171,33 +165,38 @@ export const RestaurantDetail = ({
           cond(
             eq(state, State.END),
             [
-              // call([], () => console.log("end")),
               set(translateX, timing({ from: translateX, to: 0 })),
               set(translateY, timing({ from: translateY, to: 0 })),
             ],
             [
-              // call([], () => console.log("bah")),
-              set(translateX, translationX),
-              set(translateY, pow(multiply(translationY, 0.55), 1.01)),
+              set(translateX, multiply(translationX, 0.5)),
+              set(translateY, pow(multiply(translationY, 0.6), 1.01)),
             ]
           )
+        ),
+        cond(
+          eq(snapTo, SNAP_BACK),
+          cond(not(belowSnapPoint), [
+            set(belowSnapPoint, 1),
+            call([], () => Haptics.selectionAsync()),
+          ]),
+          cond(belowSnapPoint, set(belowSnapPoint, 0))
         ),
       ]),
     []
   );
 
-  console.log(enableGesture);
   return (
     <ScrollView
       style={styles.container}
       ref={scrollRef}
-      waitFor={enableGesture ? gestureHandlerRef : scrollRef}
+      waitFor={gestureHandlerRef}
       onScroll={onScroll}
-      scrollEventThrottle={20}>
+      scrollEventThrottle={100}>
       <PanGestureHandler
         {...gestureHandler}
         ref={gestureHandlerRef}
-        activeOffsetY={40}
+        activeOffsetY={5}
         failOffsetY={-5}
         enabled={enableGesture}>
         <Animated.View
@@ -252,12 +251,6 @@ export const RestaurantDetail = ({
           <Layout>
             <Flex alignItems="center" justifyContent="space-between">
               <Text style={styles.title}>{title}</Text>
-              {/* TODO: add icon support */}
-              {/* {icons.map((attr, i) => (
-                <Text key={i} style={{ marginLeft: 20 }}>
-                {attr}
-                </Text>
-              ))} */}
               <SharedElement id={`rating.${id}`}>
                 <Rating rating={rating} />
               </SharedElement>
@@ -278,9 +271,6 @@ export const RestaurantDetail = ({
               <Text style={styles.infoText}>{deliveryFee} delivery fee</Text>
             </Flex>
             <Text style={[styles.infoText, { marginTop: 8 }]}>{location}</Text>
-            {/* ----------------- */}
-            {/*   MAP GOES HERE   */}
-            {/* ----------------- */}
             <Divider />
             <Text style={styles.infoText}>Menu</Text>
             {categories.map((category) =>
@@ -318,8 +308,6 @@ const styles = StyleSheet.create({
     top: 45,
     right: 20,
   },
-  attributes: {},
-  rating: {},
   divider: {
     width: FULL_WIDTH,
     height: 1,
