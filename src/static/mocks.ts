@@ -18,6 +18,68 @@ const offers = [
   }
 ];
 
+const dishes = [
+  {
+    id: 1,
+    name: "Sweet and sour chicken",
+    description: "Classic dish served with white rice",
+    price: "£7.99",
+    imageUrl:
+      "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
+  },
+  {
+    id: 2,
+    name: "Chicken chow mein",
+    description: "An iconic meal, cooked fresh to order",
+    price: "£6.49",
+    imageUrl:
+      "https://hips.hearstapps.com/hmg-prod/images/delish-chicken-chow-mein-1-jpg-1525987874.jpg"
+  },
+  {
+    id: 3,
+    name: "Pasta Arrabiata",
+    description: "Classic Italian dish, with fresh chili's",
+    price: "£9.49",
+    imageUrl:
+      "https://www.saltandlavender.com/wp-content/uploads/2019/04/easy-pasta-arrabiata-recipe-1-500x500.jpg"
+  },
+  {
+    id: 4,
+    name: "Pizza Napoletana",
+    description:
+      "Classic Pizza - with tomato sauce, mozarella cheese and fresh basil",
+    price: "£9.49",
+    imageUrl:
+      "https://media-cdn.tripadvisor.com/media/photo-s/05/75/ff/cc/una-pizza-napoletana.jpg"
+  },
+  {
+    id: 5,
+    name: "Pepperoni Pizza",
+    description: "Pizza with tomato, mozarella and pepporoni",
+    price: "£10.49",
+    imageUrl:
+      "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fcdn-image.myrecipes.com%2Fsites%2Fdefault%2Ffiles%2Fstyles%2Fmedium_2x%2Fpublic%2Fimage%2Frecipes%2Fck%2Fgluten-free-cookbook%2Fpepperoni-pizza-ck-x.jpg%3Fitok%3DNWreajsZ&w=450&c=sc&poi=face&q=85"
+  },
+  {
+    id: 6,
+    name: "Chicken Noodle Soup",
+    description: "Pizza with tomato, mozarella and pepporoni",
+    price: "£10.49",
+    imageUrl:
+      "https://www.bbcgoodfood.com/sites/default/files/styles/recipe/public/recipe/recipe-image/2019/05/recipe-image-legacy-id-1035613_10.jpg?itok=ebIUvW6b"
+  },
+  {
+    id: 7,
+    name: "Kung Po King Prawn",
+    description: "Pizza with tomato, mozarella and pepporoni",
+    price: "£8.99",
+    imageUrl:
+      "https://i.pinimg.com/originals/94/74/9a/94749acf826e2aeb7c21a588e0b81d83.jpg"
+  }
+];
+
+const getShuffledDishes = () => dishes.sort(() => Math.random() - 0.5);
+
 const restaurantCategories = [
   {
     title: "Favourites",
@@ -27,7 +89,7 @@ const restaurantCategories = [
         title: "New India",
         icons: [Icon.Hot, Icon.Healthy, Icon.Environmental],
         attributes: ["cozy", "fresh", "local"],
-        rating: 7.3,
+        rating: 3.3,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -38,59 +100,17 @@ const restaurantCategories = [
           {
             id: 1,
             name: "Fan Favourites",
-            dishes: [
-              {
-                id: 1,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 2,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 3,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 4,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              }
-            ]
+            dishes: getShuffledDishes()
           },
           {
             id: 2,
             name: "Rice dishes",
-            dishes: [
-              {
-                id: 1,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              }
-            ]
+            dishes: getShuffledDishes()
           },
           {
             id: 3,
             name: "Noodle dishes",
-            dishes: []
+            dishes: getShuffledDishes()
           }
         ]
       },
@@ -100,7 +120,7 @@ const restaurantCategories = [
         title: "Nice Pizza",
         icons: [Icon.Pizza, Icon.Dessert, Icon.Environmental],
         attributes: ["cozy", "fresh"],
-        rating: 6.2,
+        rating: 4.2,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -110,59 +130,17 @@ const restaurantCategories = [
           {
             id: 1,
             name: "Fan Favourites",
-            dishes: [
-              {
-                id: 1,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 2,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 3,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 4,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              }
-            ]
+            dishes: getShuffledDishes()
           },
           {
             id: 2,
             name: "Rice dishes",
-            dishes: [
-              {
-                id: 1,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              }
-            ]
+            dishes: getShuffledDishes()
           },
           {
             id: 3,
             name: "Noodle dishes",
-            dishes: []
+            dishes: getShuffledDishes()
           }
         ]
       },
@@ -171,7 +149,7 @@ const restaurantCategories = [
         title: "Nice Pizza",
         icons: [Icon.Pizza, Icon.VeryHot, Icon.Healthy],
         attributes: ["cozy", "fresh"],
-        rating: 6.2,
+        rating: 2.9,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -181,59 +159,17 @@ const restaurantCategories = [
           {
             id: 1,
             name: "Fan Favourites",
-            dishes: [
-              {
-                id: 1,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 2,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 3,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 4,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              }
-            ]
+            dishes: getShuffledDishes()
           },
           {
             id: 2,
             name: "Rice dishes",
-            dishes: [
-              {
-                id: 1,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              }
-            ]
+            dishes: getShuffledDishes()
           },
           {
             id: 3,
             name: "Noodle dishes",
-            dishes: []
+            dishes: getShuffledDishes()
           }
         ]
       }
@@ -247,7 +183,7 @@ const restaurantCategories = [
         title: "China Chef",
         icons: [Icon.ExtremelyHot, Icon.Healthy],
         attributes: ["cozy", "fresh", "local"],
-        rating: 6.2,
+        rating: 4.5,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -258,40 +194,7 @@ const restaurantCategories = [
           {
             id: 1,
             name: "Fan Favourites",
-            dishes: [
-              {
-                id: 1,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 2,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 3,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              },
-              {
-                id: 4,
-                name: "Sweet and sour chicken",
-                description: "Classic dish served with white rice",
-                price: "£7.99",
-                imageUrl:
-                  "https://rasamalaysia.com/wp-content/uploads/2014/08/sweet-sour-chicken-thumb.jpg"
-              }
-            ]
+            dishes: getShuffledDishes()
           },
           {
             id: 2,
@@ -320,7 +223,7 @@ const restaurantCategories = [
         title: "Pasta King",
         icons: [Icon.Environmental, Icon.Pizza, Icon.Hot],
         attributes: ["cozy", "fresh"],
-        rating: 6.2,
+        rating: 3.7,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -391,7 +294,7 @@ const restaurantCategories = [
         title: "Nice Pizza",
         icons: [Icon.Healthy, Icon.Pizza, Icon.VeryHot],
         attributes: ["cozy", "fresh"],
-        rating: 6.2,
+        rating: 3.4,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -467,7 +370,7 @@ const restaurantCategories = [
         title: "Noodle Prince",
         icons: [Icon.Dessert, Icon.Hot],
         attributes: ["cozy", "fresh", "local"],
-        rating: 6.2,
+        rating: 4.2,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -540,7 +443,7 @@ const restaurantCategories = [
         title: "Nice Pizza",
         icons: [Icon.Healthy, Icon.Pizza, Icon.Environmental],
         attributes: ["cozy", "fresh"],
-        rating: 6.2,
+        rating: 4.8,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
@@ -611,7 +514,7 @@ const restaurantCategories = [
         title: "Nice Pizza",
         icons: [Icon.Environmental, Icon.Pizza, Icon.Hot],
         attributes: ["cozy", "fresh"],
-        rating: 6.2,
+        rating: 4.6,
         distance: 3.1,
         time: "25-30 min",
         imageUrl:
