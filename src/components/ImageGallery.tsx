@@ -4,7 +4,7 @@ import {
   Image,
   TouchableHighlight,
   View,
-  Animated
+  Animated,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
 
@@ -13,7 +13,7 @@ import {
   HORIZONTAL_MARGIN,
   GALLERY_IMAGE_WIDTH,
   GALLERY_IMAGE_HEIGHT,
-  SLIDER_WIDTH
+  SLIDER_WIDTH,
 } from "../constants/styles";
 
 type ImageGalleryProps = {
@@ -33,7 +33,7 @@ const Content = ({ image, offerText, active }: ContentProps) => {
       Animated.timing(opacity, {
         toValue: 1,
         duration: 200,
-        delay: 0
+        delay: 0,
       }).start();
     }
     if (!active) {
@@ -52,10 +52,10 @@ const Content = ({ image, offerText, active }: ContentProps) => {
           bottom: 45,
           left: opacity.interpolate({
             inputRange: [0, 1],
-            outputRange: [-10, HORIZONTAL_MARGIN]
+            outputRange: [-10, HORIZONTAL_MARGIN],
           }),
           opacity,
-          zIndex: 999
+          zIndex: 999,
         }}>
         {offerText}
       </Animated.Text>
@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
   image: {
     height: GALLERY_IMAGE_HEIGHT,
     width: GALLERY_IMAGE_WIDTH,
-    opacity: 0.6
-  }
+    opacity: 0.6,
+  },
 });

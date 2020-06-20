@@ -1,7 +1,4 @@
-import React from "react";
-import { Animated, Easing } from "react-native";
 import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 import { Home } from "./Home";

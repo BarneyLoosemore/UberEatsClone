@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
     width: 280,
     height: 175,
     resizeMode: "cover"
-    // borderRadius: 5
   },
   content: {
     display: "flex",
@@ -111,9 +110,9 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   title: {
-    fontFamily: "transport",
+    fontFamily: "airbnbMed",
     fontSize: 18
   },
-  attributes: { fontFamily: "transport" },
-  time: { fontFamily: "transport", color: "grey" }
+  attributes: {},
+  time: { fontFamily: "airbnbMed", color: "grey" }
 });

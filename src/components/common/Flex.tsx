@@ -1,8 +1,6 @@
 import React from "react";
 import { View } from "react-native";
 
-// TODO: allow style prop to be passed down
-
 type FlexProps = {
   justifyContent?: any;
   alignItems?: any;
@@ -16,7 +14,7 @@ export const Flex = ({
   alignItems,
   fullWidth,
   direction,
-  children
+  children,
 }: FlexProps) => (
   <View
     style={{
@@ -24,7 +22,7 @@ export const Flex = ({
       justifyContent: justifyContent || "flex-start",
       alignItems: alignItems || "flex-start",
       width: fullWidth ? "100%" : "auto",
-      flexDirection: direction || "row"
+      flexDirection: direction || "row",
     }}>
     {children}
   </View>

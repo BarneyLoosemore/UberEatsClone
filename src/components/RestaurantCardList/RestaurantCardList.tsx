@@ -15,7 +15,7 @@ type RestaurantCardListProps = {
 };
 
 export const RestaurantCardList = ({
-  restaurants
+  restaurants,
 }: RestaurantCardListProps) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -25,5 +25,3 @@ export const RestaurantCardList = ({
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({});
