@@ -7,13 +7,13 @@ import {
   onGestureEvent,
   useValues,
   snapPoint,
-  timing
+  timing,
 } from "react-native-redash";
 import { Ionicons } from "@expo/vector-icons";
 
 import { height as DEVICE_HEIGHT } from "../constants/styles";
 
-const { block, useCode, cond, and, eq, set, not, greaterOrEq, call } = Animated;
+const { block, useCode, cond, and, eq, set, not, greaterOrEq } = Animated;
 
 const TOP_OFFSET = 100;
 const MIN = DEVICE_HEIGHT;
@@ -33,10 +33,6 @@ export const ModalSlider = ({ translateY }: ModalSliderProps) => {
   );
   const snapTo = snapPoint(translationY, velocityY, [0, SNAP_BACK]);
 
-  const cb = args => {
-    console.log(args);
-  };
-
   useCode(
     () =>
       block([
@@ -44,8 +40,6 @@ export const ModalSlider = ({ translateY }: ModalSliderProps) => {
           and(not(shouldSnapBack), eq(snapTo, SNAP_BACK), eq(state, State.END)),
           set(shouldSnapBack, 1)
         ),
-        // callback to JS - temporary
-        call([translateY, translationY, shouldSnapBack, state], cb),
         cond(
           shouldSnapBack,
           [
@@ -55,9 +49,9 @@ export const ModalSlider = ({ translateY }: ModalSliderProps) => {
               timing({
                 from: translateY,
                 to: MIN,
-                easing: Easing.out(Easing.poly(4))
+                easing: Easing.out(Easing.poly(4)),
               })
-            )
+            ),
           ],
           [
             cond(
@@ -71,12 +65,12 @@ export const ModalSlider = ({ translateY }: ModalSliderProps) => {
                 timing({
                   from: translateY,
                   to: MAX,
-                  easing: Easing.out(Easing.poly(3))
+                  easing: Easing.out(Easing.poly(3)),
                 })
               )
-            )
+            ),
           ]
-        )
+        ),
       ]),
     [translateY, shouldSnapBack]
   );
@@ -92,7 +86,7 @@ export const ModalSlider = ({ translateY }: ModalSliderProps) => {
           backgroundColor: "white",
           borderRadius: 15,
           top: TOP_OFFSET,
-          transform: [{ translateY }]
+          transform: [{ translateY }],
         }}>
         <TouchableOpacity
           style={{ position: "absolute", left: 20, top: 10 }}
@@ -105,7 +99,7 @@ export const ModalSlider = ({ translateY }: ModalSliderProps) => {
             fontSize: 18,
             fontFamily: "airbnbMed",
             width: "100%",
-            textAlign: "center"
+            textAlign: "center",
           }}>
           Sort and filter
         </Text>

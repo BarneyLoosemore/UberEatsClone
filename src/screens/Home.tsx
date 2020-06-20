@@ -8,11 +8,11 @@ import { timing } from "react-native-redash";
 import { RestaurantCardList } from "../components/RestaurantCardList/RestaurantCardList";
 import { ImageGallery } from "../components/ImageGallery";
 import { FilterBar } from "../components/FilterBar";
-import { Sort } from "../components/Sort";
+import { ModalSlider } from "../components/ModalSlider";
 import { offers, restaurantCategories } from "../static/mocks";
 import {
   HORIZONTAL_MARGIN,
-  height as DEVICE_HEIGHT
+  height as DEVICE_HEIGHT,
 } from "../constants/styles";
 
 const { block, useCode, cond, set, interpolate, Value } = Animated;
@@ -28,25 +28,17 @@ export const Home = () => {
     []
   );
 
-  const scale = interpolate(translateY, {
-    inputRange: [MAX, MIN],
-    outputRange: [0.9, 1]
-  });
-
-  const opacity = interpolate(translateY, {
-    inputRange: [MAX, MIN],
-    outputRange: [0.7, 1]
-  });
-
-  const rotateX = interpolate(translateY, {
-    inputRange: [MAX, MIN],
-    outputRange: [0.12, 0]
-  });
-
-  const borderRadius = interpolate(translateY, {
-    inputRange: [MAX, MIN],
-    outputRange: [15, 30]
-  });
+  const [scale, opacity, rotateX, borderRadius] = [
+    [0.9, 1],
+    [0.7, 1],
+    [0.12, 0],
+    [15, 30],
+  ].map((outputRange) =>
+    interpolate(translateY, {
+      inputRange: [MAX, MIN],
+      outputRange,
+    })
+  );
 
   useCode(
     () =>
@@ -57,14 +49,14 @@ export const Home = () => {
             translateY,
             timing({ from: MIN, to: MAX, easing: Easing.out(Easing.poly(2)) })
           )
-        )
+        ),
       ]),
     [open]
   );
 
   useEffect(() => {
-    filter !== null && open.setValue(1);
-  }, [filter]);
+    // setTimeout(() => open.setValue(1), 3000);
+  }, []);
 
   return (
     <View style={styles.background}>
@@ -77,9 +69,9 @@ export const Home = () => {
             {
               perspective: 1000,
               rotateX,
-              scale
-            }
-          ]
+              scale,
+            },
+          ],
         }}>
         <Animated.ScrollView style={{ borderRadius }}>
           <FilterBar filter={filter} setFilter={setFilter} />
@@ -94,21 +86,21 @@ export const Home = () => {
           ))}
         </Animated.ScrollView>
       </Animated.View>
-      <Sort translateY={translateY} />
+      <ModalSlider translateY={translateY} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   restaurantCategoryContainer: {
-    marginBottom: 30
+    marginBottom: 30,
   },
   restaurantCategoryTitle: {
     marginLeft: HORIZONTAL_MARGIN,
     fontSize: 24,
-    fontFamily: "transport"
-  }
+    fontFamily: "airbnbMed",
+  },
 });
